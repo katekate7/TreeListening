@@ -12,7 +12,12 @@ export const authApi = apiSlice.injectEndpoints({
         body: credentials,
       }),
       transformResponse: (response: any) => {
-        return response; 
+        if (response?.token) {
+          // Stockage du token dans localStorage
+          localStorage.setItem('accessToken', response.token)
+        }
+
+        return response
       },
       invalidatesTags: [{ type: 'Auth', id: 'STATUS' }],
     }),
