@@ -1,21 +1,31 @@
-// atoms/Button.tsx
+//Button.tsx
 import React from 'react';
- 
+
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
- 
-const Button: React.FC<ButtonProps> = ({ label, onClick, className = '' }) => {
+
+const Button: React.FC<ButtonProps> = ({ 
+  label, 
+  onClick, 
+  className = '', 
+  type = 'button',
+  disabled = false
+}) => {
   return (
-    <button
-      onClick={onClick}
-      className={`w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors ${className}`}
+    <button 
+      onClick={onClick} 
+      className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      type={type}
+      disabled={disabled}
     >
       {label}
     </button>
   );
 };
- 
+
 export default Button;

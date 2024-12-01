@@ -1,29 +1,35 @@
-// endpoints/auth.tsx
-import { apiSlice } from "../apiSlice"
+//auth.ts
+import { apiSlice } from '../apiSlice';
 
-export const authApi = apiSlice.injectEndpoints({
+export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-  
-    // Route pour se connecter
-      login: builder.mutation<any, { email: string; password: string }>({
+    login: builder.mutation({
       query: (credentials) => ({
-        url: '/api/login_check',
+        url: '/login_check',
         method: 'POST',
-        body: credentials,
+        body: { ...credentials },
       }),
       transformResponse: (response: any) => {
-        if (response?.token) {
-          // Stockage du token dans localStorage
+        if (response?.token){
           localStorage.setItem('accessToken', response.token)
         }
-
         return response
-      },
-      invalidatesTags: [{ type: 'Auth', id: 'STATUS' }],
+      }
+    }),
+    register: builder.mutation({
+      query: (userData) => ({
+        url: '/register',
+        method: 'POST',
+        body: { ...userData },
+      }),
+    }),
+    logout: builder.mutation({
+      query: () => ({
+        url: '/logout',
+        method: 'POST',
+      }),
     }),
   }),
 });
 
-export const {
-  useLoginMutation,
-} = authApi;
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = authApiSlice;

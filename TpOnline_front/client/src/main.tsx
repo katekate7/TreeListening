@@ -1,27 +1,26 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import { Provider } from 'react-redux'
-import { store } from '../store'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Modules from './components/templates/Modules.tsx'
-import LoginTemplate from './components/templates/LoginTemplate';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import App from './App';
+import authReducer from './store/slices/authSlice';
+import { apiSlice } from './api/apiSlice';
+import './index.css'; // Assurez-vous d'avoir ce fichier pour les styles globaux
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <LoginTemplate />,
+const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
-  {
-    path: '/modules',
-    element: <Modules />,
-  },
-]);
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(apiSlice.middleware),
+});
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+ReactDOM.render(
+  <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <App />
     </Provider>
-  </StrictMode>,
+  </React.StrictMode>,
+  document.getElementById('root')
 );

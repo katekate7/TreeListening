@@ -1,41 +1,35 @@
-// molecules/LoginForm.tsx
+//LoginForm.tsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useLoginMutation } from '../../api/endpoints/auth';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../../store/slices/authSlice';
 import Input from '../atoms/Input';
 import Button from '../atoms/Button';
-import Checkbox from '../atoms/Checkbox';
-import { useLoginMutation } from '../../api/endpoints/auth';
 
-interface ErrorResponse {
-  status: number;
-  data: {
-    message: string; 
-  };
-}
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+  const [stayConnected, setStayConnected] = useState(false); // État pour la case à cocher
+  const [login, { isLoading }] = useLoginMutation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [login, { isLoading, isError, error }] = useLoginMutation();
-
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      const response = await login({ email, password }).unwrap();
-      const token = response.token;
-
-      if (keepLoggedIn && token) {
-        localStorage.setItem('token', token);
-      }
-
-      console.log('Connexion réussie', response);
+      const userData = await login({ email, password }).unwrap();
+      dispatch(setCredentials(userData));
+      navigate('/modules');
+      console.log("Connected successfully.");
     } catch (err) {
-      console.error('Erreur de connexion:', err);
+      console.error('Failed to log in:', err);
     }
   };
 
   return (
-    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+    <form onSubmit={handleLogin} className="space-y-4">
       <Input
         type="email"
         placeholder="Email"
@@ -44,28 +38,23 @@ const LoginForm: React.FC = () => {
       />
       <Input
         type="password"
-        placeholder="Mot de passe"
+        placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Checkbox
-        label="Keep me logged in"
-        checked={keepLoggedIn}
-        onChange={(e) => setKeepLoggedIn(e.target.checked)}
-      />
-      <Button
-        label={isLoading ? 'Connexion...' : 'Se connecter'}
-        onClick={handleLogin}
-      />
-      {isError && (
-        <p className="text-red-500">
-          {error && 'status' in error ? (
-            `Error: ${(error as ErrorResponse).data?.message || 'Erreur inconnue'}`
-          ) : (
-            'Erreur inconnue'
-          )}
-        </p>
-      )}
+      <div className="flex items-center">
+        <input
+          type="checkbox"
+          id="rememberMe"
+          checked={stayConnected}
+          onChange={(e) => setStayConnected(e.target.checked)}
+          className="mr-2"
+        />
+        <label htmlFor="stayConnected" className="text-gray-700"><p>Remember me</p></label>
+      </div>
+      <div className="flex justify-center">
+        <Button label={isLoading ? 'Connection...' : 'Log in'} type="submit" disabled={isLoading} />
+      </div>
     </form>
   );
 };

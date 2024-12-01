@@ -1,6 +1,6 @@
-// atoms/Input.tsx
+//Input.tsx
 import React from 'react';
- 
+
 interface InputProps {
   type: string;
   placeholder: string;
@@ -8,7 +8,7 @@ interface InputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }
- 
+
 const Input: React.FC<InputProps> = ({ type, placeholder, value, onChange, className = '' }) => {
   return (
     <input
@@ -20,5 +20,5 @@ const Input: React.FC<InputProps> = ({ type, placeholder, value, onChange, class
     />
   );
 };
- 
+
 export default Input;

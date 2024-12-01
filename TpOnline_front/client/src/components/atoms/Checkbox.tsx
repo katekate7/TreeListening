@@ -1,12 +1,12 @@
-// atoms/Checkbox.tsx
+//Checkbox.tsx
 import React from 'react';
- 
+
 interface CheckboxProps {
   label: string;
   checked: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
- 
+
 const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
   return (
     <label className="flex items-center space-x-2 cursor-pointer">
@@ -20,5 +20,5 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
     </label>
   );
 };
- 
+
 export default Checkbox;
