@@ -81,6 +81,7 @@ L'interface utilisateur a été créée avec une grande précision, comme sur la
  
 ### Authentification JWT
  
+![photo_2024-11-27_22-53-50](https://github.com/user-attachments/assets/ead475b2-5569-4150-b76d-215a0641beb1)
 
 L'authentification repose sur les JSON Web Tokens (JWT) pour garantir la sécurité des échanges entre le frontend et le backend. Voici comment cela se déroule :
 
