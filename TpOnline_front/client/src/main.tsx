@@ -5,7 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import App from './App';
 import authReducer from './store/slices/authSlice';
 import { apiSlice } from './api/apiSlice';
-import './index.css'; // Assurez-vous d'avoir ce fichier pour les styles globaux
+import './index.css'; 
 
 const store = configureStore({
   reducer: {
